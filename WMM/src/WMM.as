@@ -24,7 +24,7 @@ package
 			Statics.STAGEWIDTH = stage.fullScreenWidth;
 			Statics.STAGEHEIGHT = stage.fullScreenHeight;
 			
-			_starling = new Starling(Main,stage,new Rectangle(0,0,stage.fullScreenWidth, stage.fullScreenHeight));
+			_starling = new Starling(Main,stage,new Rectangle(0,0,stage.fullScreenWidth, stage.fullScreenHeight),null,'auto');
 			_starling.antiAliasing = 1;
 			_starling.addEventListener(Event.ROOT_CREATED, function():void {
 				new MetalWorksMobileTheme;
