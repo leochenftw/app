@@ -3,6 +3,8 @@ package
 	import Pages.PageLogin;
 	import Pages.PageOverview;
 	
+	import UI.UINavbar;
+	
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
 	import feathers.motion.Slide;
@@ -37,7 +39,7 @@ package
 			addChild(Statics.NAV);
 			Statics.NAV.showScreen('winLogin',Slide.createSlideUpTransition(0));
 			Statics.NAV.transition = Slide.createSlideUpTransition();
-			
+			Statics.NAVBAR = new UINavbar;
 		}
 	}
 }

@@ -25,7 +25,7 @@ package Pages
 		
 		protected override function init(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			trace('wtf');
+			
 		}
 		
 		private function tapHandler(e:TouchEvent):void {
@@ -48,7 +48,6 @@ package Pages
 								expendIncome();
 								break;
 							case 'expense':
-								trace('wtf')
 								break;
 						}
 					}

@@ -6,6 +6,8 @@ package
 	import Pages.PageLogin;
 	import Pages.PageOverview;
 	
+	import UI.UINavbar;
+	
 	import feathers.controls.ScreenNavigator;
 	
 	import starling.core.Starling;
@@ -19,6 +21,7 @@ package
 		public static var STAGEHEIGHT:int;
 		public static var STAGEWIDTH:int;
 		public static var STARLING:Starling;
+		public static var NAVBAR:UINavbar;
 		
 		public function Statics()
 		{

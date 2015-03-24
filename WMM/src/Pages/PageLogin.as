@@ -41,6 +41,7 @@ package Pages
 		}
 		
 		private function touchedSignin(e:Event):void {
+			Statics.MAIN.addChild(Statics.NAVBAR);
 			Statics.NAV.showScreen('winOverview');
 		}
 		
