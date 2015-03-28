@@ -31,6 +31,7 @@ package
 		
 		private function initialiser(e:Event = null):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, initialiser);
+			Statics.PADDINGTOP = Math.round(Statics.STAGEHEIGHT*0.1);
 			Statics.PAGELOGIN = new PageLogin;
 			Statics.PAGEOVERVIEW = new PageOverview;
 			Statics.NAV = new ScreenNavigator;

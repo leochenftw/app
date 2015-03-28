@@ -30,5 +30,9 @@ package Pages
 			_stage.addChild(child);
 			return child;
 		}
+		
+		public override function removeChild(child:DisplayObject, dispose:Boolean=false):DisplayObject {
+			return _stage.removeChild(child,dispose);
+		}
 	}
 }

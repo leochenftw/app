@@ -2,6 +2,11 @@ package Pages
 {
 	import com.Leo.ui.Rect;
 	
+	import UI.UITransactionForm;
+	import UI.UITransactionItem;
+	
+	import feathers.controls.ScrollContainer;
+	
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.events.Touch;
@@ -10,22 +15,29 @@ package Pages
 	
 	public class PageOverview extends MasterPage
 	{
-		private var _btnIncome:Rect = new Rect(Statics.STAGEWIDTH, Statics.STAGEHEIGHT*0.5-0.5,0x2ECC71,0.8);
-		private var _btnExpense:Rect = new Rect(Statics.STAGEWIDTH, Statics.STAGEHEIGHT*0.5-0.5,0xE74C3C,0.8);
+		private var _btnIncome:Rect = new Rect(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0x10BEC6);
+		private var _btnExpense:Rect = new Rect(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0xE46752);
+		private var _form:UITransactionForm;
+		private var _scroller:ScrollContainer;
 		public function PageOverview()
 		{
 			super();
 			_btnIncome.name = 'income';
 			_btnExpense.name = 'expense';
+			_btnExpense.x = _btnIncome.width;
+			_btnIncome.y = _btnExpense.y = Statics.PADDINGTOP;
 			addChild(_btnIncome);
-			_btnExpense.y = Statics.STAGEHEIGHT*0.5+0.5;
 			addChild(_btnExpense);
 			this.addEventListener(TouchEvent.TOUCH,tapHandler);
 		}
 		
 		protected override function init(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			
+			_scroller = new ScrollContainer;
+			_scroller.y = _btnIncome.y + _btnIncome.height;
+			_scroller.height = Statics.STAGEHEIGHT - _scroller.y;
+			trace(_scroller.isEnabled);
+			addChild(_scroller);
 		}
 		
 		private function tapHandler(e:TouchEvent):void {
@@ -45,9 +57,10 @@ package Pages
 					if (clickedObject) {
 						switch(clickedObject.name) {
 							case 'income':
-								expendIncome();
+								placeInputForm(true);
 								break;
 							case 'expense':
+								placeInputForm(false);
 								break;
 						}
 					}
@@ -55,9 +68,25 @@ package Pages
 			}
 		}
 		
-		private function expendIncome():void {
-			Statics.tlite(_btnIncome,0.25, {height:Statics.STAGEHEIGHT*0.1});
-			Statics.tlite(_btnExpense,0.25, {y:Statics.STAGEHEIGHT});
+		
+		
+		private function placeInputForm(inout:Boolean):void {
+			
+			if (_form&&contains(_form)) {
+				removeChild(_form,true);
+				_form = null;
+			}else{
+				var data:Object = {};
+				_form = new UITransactionForm(inout,function(prAmount:Number, prCategory:String):void {
+					var item:UITransactionItem = new UITransactionItem({date:'22 JAN 2015'});
+					item.y = _scroller.numChildren * item.height;
+					_scroller.addChild(item);
+					removeChild(_form,true);
+					_form = null;
+				});
+				_form.y = _btnIncome.y + _btnIncome.height;
+				addChild(_form);
+			}
 		}
 		
 		

@@ -14,6 +14,7 @@ package
 
 	public class Statics
 	{
+		public static var PADDINGTOP:int = 0;
 		public static var MAIN:Main;
 		public static var NAV:ScreenNavigator;
 		public static var PAGELOGIN:PageLogin;
