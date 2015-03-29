@@ -1,6 +1,9 @@
 package Pages
 {
 	import com.Leo.ui.Rect;
+	import com.Leo.utils.DateFormatter;
+	
+	import flash.utils.Dictionary;
 	
 	import UI.UITransactionForm;
 	import UI.UITransactionItem;
@@ -19,6 +22,7 @@ package Pages
 		private var _btnExpense:Rect = new Rect(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0xE46752);
 		private var _form:UITransactionForm;
 		private var _scroller:ScrollContainer;
+		private var _items:Dictionary = new Dictionary;
 		public function PageOverview()
 		{
 			super();
@@ -36,7 +40,6 @@ package Pages
 			_scroller = new ScrollContainer;
 			_scroller.y = _btnIncome.y + _btnIncome.height;
 			_scroller.height = Statics.STAGEHEIGHT - _scroller.y;
-			trace(_scroller.isEnabled);
 			addChild(_scroller);
 		}
 		
@@ -78,9 +81,16 @@ package Pages
 			}else{
 				var data:Object = {};
 				_form = new UITransactionForm(inout,function(prAmount:Number, prCategory:String):void {
-					var item:UITransactionItem = new UITransactionItem({date:'22 JAN 2015'});
-					item.y = _scroller.numChildren * item.height;
-					_scroller.addChild(item);
+					var tmpID:String = DateFormatter(new Date());
+					if (_items[tmpID] === undefined) {
+						var item:UITransactionItem = new UITransactionItem(tmpID);
+						item.addTransaction(prAmount,prCategory);
+						item.y = _scroller.numChildren * item.height;
+						_scroller.addChild(item);
+						_items[item.id] = item;
+					}else{
+						(_items[tmpID] as UITransactionItem).addTransaction(prAmount, prCategory);
+					}
 					removeChild(_form,true);
 					_form = null;
 				});
