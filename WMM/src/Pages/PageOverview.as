@@ -6,9 +6,10 @@ package Pages
 	import flash.utils.Dictionary;
 	
 	import UI.UITransactionForm;
-	import UI.UITransactionItem;
+	import UI.UITransactionGroup;
 	
 	import feathers.controls.ScrollContainer;
+	import feathers.events.FeathersEventType;
 	
 	import starling.display.Image;
 	import starling.events.Event;
@@ -23,6 +24,7 @@ package Pages
 		private var _form:UITransactionForm;
 		private var _scroller:ScrollContainer;
 		private var _items:Dictionary = new Dictionary;
+		private var _isScrolling:Boolean = false;
 		public function PageOverview()
 		{
 			super();
@@ -43,7 +45,9 @@ package Pages
 			addChild(_scroller);
 		}
 		
+		
 		private function tapHandler(e:TouchEvent):void {
+			
 			var touches:Vector.<Touch> = e.getTouches(this);
 			var clicked:Rect = e.currentTarget as Rect;
 			if ( touches.length == 1 )
@@ -81,18 +85,21 @@ package Pages
 			}else{
 				var data:Object = {};
 				_form = new UITransactionForm(inout,function(prAmount:Number, prCategory:String):void {
-					var tmpID:String = DateFormatter(new Date());
-					if (_items[tmpID] === undefined) {
-						var item:UITransactionItem = new UITransactionItem(tmpID);
-						item.addTransaction(prAmount,prCategory);
-						item.y = _scroller.numChildren * item.height;
-						_scroller.addChild(item);
-						_items[item.id] = item;
-					}else{
-						(_items[tmpID] as UITransactionItem).addTransaction(prAmount, prCategory);
-					}
+					//for (var i:int = 0; i<10;i++){
+						var tmpID:String = DateFormatter(new Date());//+i.toString();
+						if (_items[tmpID] === undefined) {
+							var item:UITransactionGroup = new UITransactionGroup(tmpID,_scroller);
+							item.addTransaction(prAmount,prCategory);
+							item.y = _scroller.numChildren * item.height;
+							_scroller.addChild(item);
+							_items[item.id] = item;
+						}else{
+							(_items[tmpID] as UITransactionGroup).addTransaction(prAmount, prCategory);
+						}
+					//}
 					removeChild(_form,true);
 					_form = null;
+					
 				});
 				_form.y = _btnIncome.y + _btnIncome.height;
 				addChild(_form);
