@@ -1,5 +1,7 @@
 package UI
 {
+	import com.Leo.utils.dFormat;
+
 	public class UITransactionItem extends UITransactionMaster
 	{
 		private var _data:Object;
@@ -7,6 +9,9 @@ package UI
 		{
 			_data = data;
 			super(prID);
+			
+			_txtDate.text = _data.category;
+			_txtSum.text = dFormat(_data.amount);
 		}
 		
 		

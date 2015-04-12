@@ -3,6 +3,7 @@ package UI
 	import com.Leo.utils.dFormat;
 	
 	import feathers.controls.ScrollContainer;
+	import feathers.events.FeathersEventType;
 	
 	import starling.events.Event;
 	import starling.events.TouchEvent;
@@ -20,14 +21,20 @@ package UI
 			_list.height = Math.round(Statics.STAGEHEIGHT*0.11)*3;
 			_list.width = Statics.STAGEWIDTH;
 			_list.y = Math.round(Statics.STAGEHEIGHT*0.11);
-			_list.addEventListener(Event.SCROLL, scrollMonitor);
+			_list.addEventListener(FeathersEventType.SCROLL_START, onScrollBegin);
+			_list.addEventListener(FeathersEventType.SCROLL_COMPLETE, onScrollEnd);
 			this.addEventListener(TouchEvent.TOUCH,popScroller);
 		}
 		
-		private function scrollMonitor(e:Event):void
+		private function onScrollBegin(e:Event):void
 		{
-			trace(e);
-		}		
+			this.removeEventListener(TouchEvent.TOUCH,popScroller);
+		}	
+		
+		private function onScrollEnd(e:Event):void
+		{
+			this.addEventListener(TouchEvent.TOUCH,popScroller);
+		}	
 		
 		
 		private function popScroller(e:TouchEvent):void {
