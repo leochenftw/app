@@ -1,9 +1,9 @@
 package UI
 {
-	import com.Leo.ui.Rect;
 	
 	import feathers.controls.Button;
 	
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -11,7 +11,7 @@ package UI
 	public class UINavbar extends Sprite
 	{
 		private var _btnMenu:Button = new Button;
-		private var _bg:Rect = new Rect(Statics.STAGEWIDTH, Statics.PADDINGTOP, 0x212121);
+		private var _bg:Quad = new Quad(Statics.STAGEWIDTH, Statics.PADDINGTOP, 0x212121);
 		private var _title:TextField;
 		public function UINavbar()
 		{

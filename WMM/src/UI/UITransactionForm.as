@@ -1,12 +1,12 @@
 package UI
 {
-	import com.Leo.ui.Rect;
 	import com.Leo.utils.pf;
 	import com.Leo.utils.trim;
 	
 	import feathers.controls.Button;
 	import feathers.controls.TextInput;
 	
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
@@ -19,7 +19,7 @@ package UI
 		private var _btnSubmit:Button;
 		private var _data:Object;
 		private const _x:Number = Math.round(Statics.STAGEWIDTH*0.05);
-		private var _bg:Rect;
+		private var _bg:Quad;
 		private var _callback:Function;
 		public function UITransactionForm(inout:Boolean, callback:Function, data:Object = null,fullMode:Boolean = false)
 		{
@@ -74,8 +74,9 @@ package UI
 				_btnSubmit.x = _x*2 + _btnFullmode.width;
 				_btnSubmit.width = Statics.STAGEWIDTH - _x*3 - _btnFullmode.width;
 				
-				_bg = new Rect(Statics.STAGEWIDTH,_btnFullmode.y + _btnFullmode.height + _x,_bgc);
+				_bg = new Quad(Statics.STAGEWIDTH,_btnFullmode.y + _btnFullmode.height + _x,_bgc);
 				addChildAt(_bg,0);
+				
 				this.alpha = 1;
 			}
 		}

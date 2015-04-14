@@ -1,7 +1,6 @@
 package UI
-{
-	import com.Leo.ui.Rect;
-	
+{	
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.text.TextField;
 	
@@ -18,7 +17,7 @@ package UI
 			super();
 			_id = prID;
 			_spOverview = new Sprite;
-			var lcSPBG:Rect = new Rect(Statics.STAGEWIDTH,Math.round(Statics.STAGEHEIGHT*0.11),0xffffff);
+			var lcSPBG:Quad = new Quad(Statics.STAGEWIDTH,Math.round(Statics.STAGEHEIGHT*0.11),0xffffff);
 			_spOverview.addChild(lcSPBG);
 			
 			
@@ -31,7 +30,7 @@ package UI
 			_txtSum.x = _x;
 			_txtSum.hAlign = 'right';
 			_spOverview.addChild(_txtSum);
-			var borderBottom:Rect = new Rect(_spOverview.width,2,0xEFEFEF);
+			var borderBottom:Quad = new Quad(_spOverview.width,2,0xEFEFEF);
 			borderBottom.y = _spOverview.height-2;
 			_spOverview.addChild(borderBottom);
 			addChild(_spOverview);

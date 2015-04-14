@@ -1,6 +1,5 @@
 package Pages
 {
-	import com.Leo.ui.Rect;
 	import com.Leo.utils.DateFormatter;
 	
 	import flash.utils.Dictionary;
@@ -9,9 +8,9 @@ package Pages
 	import UI.UITransactionGroup;
 	
 	import feathers.controls.ScrollContainer;
-	import feathers.events.FeathersEventType;
 	
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -19,8 +18,8 @@ package Pages
 	
 	public class PageOverview extends MasterPage
 	{
-		private var _btnIncome:Rect = new Rect(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0x10BEC6);
-		private var _btnExpense:Rect = new Rect(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0xE46752);
+		private var _btnIncome:Quad = new Quad(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0x10BEC6);
+		private var _btnExpense:Quad = new Quad(Statics.STAGEWIDTH*0.5, Math.round(Statics.STAGEHEIGHT*0.18),0xE46752);
 		private var _form:UITransactionForm;
 		private var _scroller:ScrollContainer;
 		private var _items:Dictionary = new Dictionary;
@@ -49,17 +48,17 @@ package Pages
 		private function tapHandler(e:TouchEvent):void {
 			
 			var touches:Vector.<Touch> = e.getTouches(this);
-			var clicked:Rect = e.currentTarget as Rect;
+			var clicked:Quad = e.currentTarget as Quad;
 			if ( touches.length == 1 )
 			{
 				var touch:Touch = touches[0];   
 				if ( touch.phase == TouchPhase.ENDED )
 				{
-					var clickedObject:Rect;
+					var clickedObject:Quad;
 					if (e.target is Image) {
-						clickedObject = ((e.target as Image).parent as Rect);
-					}else if (e.target is Rect) {
-						clickedObject = e.target as Rect;
+						clickedObject = ((e.target as Image).parent as Quad);
+					}else if (e.target is Quad) {
+						clickedObject = e.target as Quad;
 					}
 					if (clickedObject) {
 						switch(clickedObject.name) {
