@@ -3,6 +3,10 @@ package
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	
+	import flash.utils.Dictionary;
+	
+	import Managers.FileIO;
+	
 	import Pages.PageLogin;
 	import Pages.PageOverview;
 	
@@ -23,6 +27,8 @@ package
 		public static var STAGEWIDTH:int;
 		public static var STARLING:Starling;
 		public static var NAVBAR:UINavbar;
+		public static var IO:FileIO;
+		public static var ASSETS:Dictionary = new Dictionary;
 		
 		public function Statics()
 		{

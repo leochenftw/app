@@ -5,35 +5,51 @@ package UI
 	import feathers.controls.ScrollContainer;
 	import feathers.events.FeathersEventType;
 	
+	import starling.display.Image;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.textures.Texture;
 
 	public class UITransactionGroup extends UITransactionMaster
 	{
 		private var _parentScroller:ScrollContainer;
 		private var _idx:int = 0;
 		private var _list:ScrollContainer = new ScrollContainer;
+		private var _toggler:Sprite = new Sprite;
 		public function UITransactionGroup(prID:String,scroller:ScrollContainer)
 		{
 			_parentScroller = scroller;
 			super(prID);
-			_list.height = Math.round(Statics.STAGEHEIGHT*0.11)*3;
+			var lcArrowImage:Image = new Image(Texture.fromBitmap(Statics.ASSETS['Arrow']));
+			lcArrowImage.height = _txtDate.height*0.4;
+			lcArrowImage.scaleX = lcArrowImage.scaleY;
+			_toggler.pivotX = lcArrowImage.width * 0.5;
+			_toggler.pivotY = lcArrowImage.height * 0.5;
+			_toggler.addChild(lcArrowImage);
+			_toggler.y = this.height*0.5;
+			_toggler.x = this.width - _toggler.y
+			
+			_txtSum.width-= (_toggler.y+lcArrowImage.height * 0.5);
+			
+			_list.height = this.height*3;
 			_list.width = Statics.STAGEWIDTH;
-			_list.y = Math.round(Statics.STAGEHEIGHT*0.11);
+			_list.y = this.height;
 			_list.addEventListener(FeathersEventType.SCROLL_START, onScrollBegin);
 			_list.addEventListener(FeathersEventType.SCROLL_COMPLETE, onScrollEnd);
-			this.addEventListener(TouchEvent.TOUCH,popScroller);
+			addChild(_toggler);
+			_toggler.addEventListener(TouchEvent.TOUCH,popScroller);
 		}
 		
 		private function onScrollBegin(e:Event):void
 		{
-			this.removeEventListener(TouchEvent.TOUCH,popScroller);
+			//this.removeEventListener(TouchEvent.TOUCH,popScroller);
 		}	
 		
 		private function onScrollEnd(e:Event):void
 		{
-			this.addEventListener(TouchEvent.TOUCH,popScroller);
+			//this.addEventListener(TouchEvent.TOUCH,popScroller);
 		}	
 		
 		
@@ -43,8 +59,10 @@ package UI
 				if (!_parentScroller.isScrolling) {
 					if (!contains(_list)) {
 						addChild(_list);
+						_toggler.rotation = 0.5*Math.PI;
 					}else{
 						removeChild(_list);
+						_toggler.rotation = 0;
 					}
 				}
 			}
@@ -56,7 +74,7 @@ package UI
 				category: prCategory
 			};
 			
-			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o);
+			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o,_txtSum.width);
 			_idx++;
 			
 			lcTranItem.y = _list.numChildren * lcTranItem.height;

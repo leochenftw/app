@@ -21,12 +21,12 @@ package UI
 			_spOverview.addChild(lcSPBG);
 			
 			
-			_txtDate = new TextField(lcSPBG.width-_x*2,lcSPBG.height,_id,'Myriad Pro',lcSPBG.height * 0.2, 0x616161);
+			_txtDate = new TextField(lcSPBG.width-_x*2,lcSPBG.height,_id,'Myriad Pro',lcSPBG.height * 0.25, 0x616161);
 			_txtDate.x = _x;
 			_txtDate.hAlign = 'left';
 			_spOverview.addChild(_txtDate);
 			
-			_txtSum = new TextField(lcSPBG.width-_x*2,lcSPBG.height,'$0.00','Myriad Pro',lcSPBG.height * 0.2, 0x616161);
+			_txtSum = new TextField(lcSPBG.width-_x*2,lcSPBG.height,'$0.00','Myriad Pro',lcSPBG.height * 0.25, 0x616161);
 			_txtSum.x = _x;
 			_txtSum.hAlign = 'right';
 			_spOverview.addChild(_txtSum);
