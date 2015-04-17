@@ -2,6 +2,8 @@ package UI
 {
 	import com.Leo.utils.dFormat;
 	
+	import Managers.FileIO;
+	
 	import feathers.controls.ScrollContainer;
 	import feathers.events.FeathersEventType;
 	
@@ -18,12 +20,14 @@ package UI
 		private var _idx:int = 0;
 		private var _list:ScrollContainer = new ScrollContainer;
 		private var _toggler:Sprite = new Sprite;
+		private var _triangle:Sprite = new Sprite;
 		public function UITransactionGroup(prID:String,scroller:ScrollContainer)
 		{
 			_parentScroller = scroller;
 			super(prID);
-			var lcArrowImage:Image = new Image(Texture.fromBitmap(Statics.ASSETS['Arrow']));
-			lcArrowImage.height = _txtDate.height*0.4;
+			var lcArrowImage:Image = new Image(Texture.fromBitmap(FileIO.getImage('arrow')));
+			
+			lcArrowImage.height = Math.round(_txtDate.height*0.4);
 			lcArrowImage.scaleX = lcArrowImage.scaleY;
 			_toggler.pivotX = lcArrowImage.width * 0.5;
 			_toggler.pivotY = lcArrowImage.height * 0.5;
@@ -33,6 +37,17 @@ package UI
 			
 			_txtSum.width-= (_toggler.y+lcArrowImage.height * 0.5);
 			
+			var lcUpArrow:Image = new Image(Texture.fromBitmap(FileIO.getImage('arrow-s')));
+			
+			lcUpArrow.height = _toggler.height;
+			lcUpArrow.scaleX = lcUpArrow.scaleY;
+			lcUpArrow.rotation = -0.5*Math.PI;
+			_triangle.addChild(lcUpArrow);
+			
+			_triangle.y = this.height;
+			_triangle.x = _toggler.x - _triangle.width*0.5;
+			_triangle.visible = false;
+			
 			_list.height = this.height*3;
 			_list.width = Statics.STAGEWIDTH;
 			_list.y = this.height;
@@ -40,6 +55,8 @@ package UI
 			_list.addEventListener(FeathersEventType.SCROLL_COMPLETE, onScrollEnd);
 			addChild(_toggler);
 			_toggler.addEventListener(TouchEvent.TOUCH,popScroller);
+			
+			addChild(_triangle);
 		}
 		
 		private function onScrollBegin(e:Event):void
@@ -60,9 +77,11 @@ package UI
 					if (!contains(_list)) {
 						addChild(_list);
 						_toggler.rotation = 0.5*Math.PI;
+						_triangle.visible = true;
 					}else{
 						removeChild(_list);
 						_toggler.rotation = 0;
+						_triangle.visible = false;
 					}
 				}
 			}
