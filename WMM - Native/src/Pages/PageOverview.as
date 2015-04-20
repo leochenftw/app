@@ -4,6 +4,7 @@ package Pages
 	import com.Leo.utils.UIScrollVerticalMaker;
 	
 	import UI.UITopBar;
+	import UI.UITransactionGroup;
 
 	public class PageOverview extends Page
 	{
@@ -24,8 +25,12 @@ package Pages
 			addChild(_btnExpense);
 			_btnExpense.x = _btnIncome.width = _btnExpense.width = Statics.STAGEWIDTH*0.5;
 			
-			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH, Statics.STAGEHEIGHT-_btnExpense.y + _btnExpense.height, 0, 0);
-			
+			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH, Statics.STAGEHEIGHT-(_btnExpense.y + _btnExpense.height), 0, 0);
+			_scroller.y = _btnExpense.y + _btnExpense.height;
+			for (var i:int = 0; i < 10; i++){
+				var g:UITransactionGroup = new UITransactionGroup(i.toString());
+				_scroller.attachVertical(g);
+			}
 		}
 	}
 }
