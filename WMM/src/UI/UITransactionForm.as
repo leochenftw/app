@@ -4,6 +4,7 @@ package UI
 	import com.Leo.utils.trim;
 	
 	import feathers.controls.Button;
+	import feathers.controls.TextArea;
 	import feathers.controls.TextInput;
 	
 	import starling.display.Quad;
@@ -21,6 +22,7 @@ package UI
 		private const _x:Number = Math.round(Statics.STAGEWIDTH*0.05);
 		private var _bg:Quad;
 		private var _callback:Function;
+		private var _txtMemo:TextArea;
 		public function UITransactionForm(inout:Boolean, callback:Function, data:Object = null,fullMode:Boolean = false)
 		{
 			super();
@@ -32,9 +34,40 @@ package UI
 				if (!fullMode) {
 					this.addEventListener(Event.ADDED_TO_STAGE, createMinUI);
 				}
+			}else{
+				this.addEventListener(Event.ADDED_TO_STAGE, createFullUI);
 			}
 			
 			this.alpha = 0;
+		}
+		
+		private function createFullUI(e:Event = null):void {
+			_bg = new Quad(Statics.STAGEWIDTH, Statics.STAGEHEIGHT,0xE6E6E6);
+			addChild(_bg);
+			_txtAmount = new TextInput;
+			_txtAmount.restrict = '\.0-9';
+			_txtCat = new TextInput;
+			_btnSubmit = new Button;
+			
+			addChild(_txtAmount);
+			addChild(_txtCat);
+			addChild(_btnSubmit);
+			
+			_txtAmount.y = _x + Math.round(Statics.STAGEHEIGHT*0.11);
+			_txtAmount.prompt = 'Amount';
+			_txtCat.prompt = 'Category';
+			_btnSubmit.label = 'Enter';
+			_txtAmount.width = _txtCat.width = Statics.STAGEWIDTH - _x*2;
+			_txtCat.y = _txtAmount.y + _txtAmount.height + _x;
+			_txtAmount.x = _txtCat.x = _x;
+			
+			_txtMemo = new TextArea;
+			addChild(_txtMemo);
+			_txtMemo.x = _x;
+			_txtMemo.width = Statics.STAGEWIDTH - _x*2;
+			_txtMemo.height = Math.round(Statics.STAGEHEIGHT * 0.21);
+			_txtMemo.y = _txtCat.y + _txtCat.height + _x;
+			
 		}
 		
 		private function createMinUI(e:Event = null):void {
