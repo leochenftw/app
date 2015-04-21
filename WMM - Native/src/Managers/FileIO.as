@@ -8,7 +8,7 @@ package Managers
 		public static const imgArrow:Class;
 		[Embed(source="../Assets/btnedit.png")]
 		public static const imgEdit:Class;
-		[Embed(source="../Assets/short-arrow.png")]
+		[Embed(source="../Assets/arrow-bottom.png")]
 		public static const imgArrowS:Class;
 		[Embed(source="../Assets/icoEmail.png")]
 		public static const imgEmail:Class;

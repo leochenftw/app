@@ -2,19 +2,18 @@ package UI
 {
 	import com.Leo.utils.LeoButton;
 	import com.Leo.utils.LeoInput;
+	import com.Leo.utils.pf;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
-	import feathers.controls.Button;
-	import feathers.controls.TextInput;
-	
-	import starling.events.Event;
 	
 	public class UITransactionForm extends Sprite
 	{
 		private var _bgc:uint = 0;
 		private var _txtAmount:Sprite = new Sprite;
+		private var _spCat:Sprite = new Sprite;
 		private var _txtCat:LeoInput;
 		private var _btnFullmode:LeoButton;
 		private var _btnSubmit:LeoButton;
@@ -22,8 +21,10 @@ package UI
 		private const _x:Number = Math.round(Statics.STAGEWIDTH*0.05);
 		private var _callback:Function;
 		private var _txtMemo:LeoInput;
+		private var _prefix:int = 1;
 		public function UITransactionForm(inout:Boolean, callback:Function, data:Object = null,fullMode:Boolean = false)
 		{
+			_prefix = inout?1:-1;
 			_bgc = inout?0x10BEC6:0xE46752;
 			_callback = callback;
 			_data = data;
@@ -36,7 +37,7 @@ package UI
 				this.addEventListener(Event.ADDED_TO_STAGE, createFullUI);
 			}
 			
-			this.alpha = 0;
+			//this.alpha = 0;
 		}
 		
 		protected function createFullUI(event:Event):void
@@ -51,24 +52,57 @@ package UI
 			_txtAmount.graphics.drawRect(0,0,Statics.STAGEWIDTH - _x*2,Math.round(Statics.STAGEHEIGHT*0.1));
 			_txtAmount.graphics.endFill();
 			
-			_txtCat = new LeoInput(;
-			_btnFullmode = new Button;
-			_btnSubmit = new Button;
-			addChild(_txtAmount);
-			addChild(_txtCat);
+			_spCat.graphics.beginFill(0xffffff,1);
+			_spCat.graphics.drawRect(0,0,Statics.STAGEWIDTH - _x*2,Math.round(Statics.STAGEHEIGHT*0.1));
+			_spCat.graphics.endFill();
+			
+			_txtCat = new LeoInput(Statics.STAGEWIDTH*0.62,Math.round(_spCat.height*0.5),this,'',Statics.FONTSTYLES['date-label'],false,0,'Category');
+			_txtCat.x = _x;
+			_txtCat.y = Math.round((_spCat.height - _txtCat.height)*0.5);
+			_spCat.x = _x;
+			_spCat.addChild(_txtCat);
+			_btnFullmode = new LeoButton(_txtAmount.height,0,'...',0xffffff,0x000000,0.2,0.4);
 			addChild(_btnFullmode);
+			_btnFullmode.width = _btnFullmode.height;
+			
+			_btnSubmit = new LeoButton(_btnFullmode.height,0,'Enter',0xffffff,0x000000,0.2);
 			addChild(_btnSubmit);
+			_btnSubmit.width = _txtAmount.width - _x - _btnFullmode.width;
+			
+			addChild(_txtAmount);
+			addChild(_spCat);
+			
 			_txtAmount.y = _x;
-			_txtAmount.prompt = 'Amount';
-			_txtCat.prompt = 'Category';
-			_btnFullmode.label = '...';
-			_btnSubmit.label = 'Enter';
-			_txtAmount.width = _txtCat.width = Statics.STAGEWIDTH - _x*2;
-			_txtCat.y = _txtAmount.y + _txtAmount.height + _x;
+			_spCat.y = _txtAmount.y + _txtAmount.height + _x;
 			_txtAmount.x = _txtAmount.y = _txtCat.x = _btnFullmode.x = _x;
 			
-			this.addEventListener(Event.ENTER_FRAME, layoutMin);
-			_btnSubmit.addEventListener(Event.TRIGGERED, submitHandler);
+			_btnSubmit.y = _btnFullmode.y = _spCat.y + _spCat.height + _x;
+			_btnSubmit.x = 2*_x + _btnFullmode.width;
+			
+			this.graphics.beginFill(_bgc,1);
+			this.graphics.drawRect(0,0,Statics.STAGEWIDTH,_btnFullmode.y + _btnFullmode.height + _x);
+			this.graphics.endFill();
+			
+			
+			//this.addEventListener(Event.ENTER_FRAME, layoutMin);
+			_btnSubmit.addEventListener(MouseEvent.CLICK, submitHandler);
+		}
+		
+		protected function submitHandler(e:MouseEvent):void
+		{
+			_callback(_txtCat.text,66.68*_prefix);
+		}
+		
+		public function dispose():void {
+			_btnSubmit.removeEventListener(MouseEvent.CLICK, submitHandler);
+			this.graphics.clear();
+			_txtAmount = null;
+			_spCat = null;
+			_txtCat  = null;
+			_btnFullmode = null;
+			_btnSubmit = null;
+			_data = null;
+			_txtMemo = null;
 		}
 	}
 }

@@ -18,10 +18,11 @@ package UI
 		private var _mask:Shape = new Shape;
 		private var _idx:int = 0;
 		private var _scroller:UIScrollVerticalMaker;
-		public function UITransactionGroup(prID:String)
+		private var _parentScroller:UIScrollVerticalMaker;
+		public function UITransactionGroup(prID:String,parentScroller:UIScrollVerticalMaker)
 		{
 			super(prID);
-			
+			_parentScroller = parentScroller;
 			_mask.graphics.beginFill(0x000000);
 			_mask.graphics.drawRect(0,0,Statics.STAGEWIDTH, Math.round(Statics.STAGEHEIGHT*0.11)+1);
 			_mask.graphics.endFill();
@@ -40,20 +41,17 @@ package UI
 			this.graphics.moveTo(0,this.height);
 			this.graphics.lineTo(Statics.STAGEWIDTH,this.height);
 			
-			var imgTriangle:Bitmap = FileIO.getImage('arrow');;
+			var imgTriangle:Bitmap = FileIO.getImage('arrow-s');;
 			imgTriangle = LeoBitmapResizer.resize(imgTriangle,0,Math.round(this.height*0.35));
 			_triangle.addChild(imgTriangle);
-			
-			_triangle.graphics.beginFill(0xffffff);
-			_triangle.graphics.drawRect(0,0,imgTriangle.width,imgTriangle.height);
-			_triangle.graphics.endFill();
 			
 			_triangle.rotation = -90;
 			_triangle.y = this.height+_triangle.height;
 			_triangle.x = Statics.STAGEWIDTH - _triangle.width*2;
 			
 			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,this.height*3);
-			
+			removeChild(_scroller);
+			_scroller.y = this.height;
 			_btnExpand.addEventListener(MouseEvent.CLICK, clickHandler);
 		}
 		
@@ -70,11 +68,25 @@ package UI
 			
 			if (!stage) {
 				_sum += prAmount;
-				_txtSum.text = dFormat(_sum);
+				_txtSum.text = dFormat(Math.abs(_sum));
+				if (_sum<0) {
+					_txtSum.setTextFormat(Statics.FONTSTYLES['expense']);
+					_txtSum.defaultTextFormat = Statics.FONTSTYLES['expense'];
+				}else{
+					_txtSum.setTextFormat(Statics.FONTSTYLES['income']);
+					_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
+				}
 			}else{
 				var tmpO:Object = {a:_sum};
 				Statics.tLite(tmpO,1,{a:_sum+=prAmount, onUpdate:function():void {
-					_txtSum.text = dFormat(tmpO.a);
+					_txtSum.text = dFormat(Math.abs(tmpO.a));
+					if (tmpO.a<0) {
+						_txtSum.setTextFormat(Statics.FONTSTYLES['expense']);
+						_txtSum.defaultTextFormat = Statics.FONTSTYLES['expense'];
+					}else{
+						_txtSum.setTextFormat(Statics.FONTSTYLES['income']);
+						_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
+					}
 				},onComplete:function():void {
 					delete tmpO.a;
 					tmpO = null;
@@ -89,13 +101,19 @@ package UI
 				addChild(_triangle);
 				addChild(_mask);
 				_triangle.mask = _mask;
+				addChildAt(_scroller,0);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 90});
 				Statics.tLite(_triangle, 0.25, {y: ty});
+				_parentScroller.expand(this,ty*3);
+				_parentScroller.scrollEnabled = false;
 			}else{
+				removeChild(_scroller);
+				_parentScroller.collapse(this,ty*3);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 0});
 				Statics.tLite(_triangle, 0.25, {y: ty+_triangle.height, onComplete:function():void {
 					removeChild(_triangle);
 					removeChild(_mask);
+					_parentScroller.scrollEnabled = true;
 				}});
 			}
 		}
