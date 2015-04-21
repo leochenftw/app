@@ -1,6 +1,8 @@
 package UI
 {
 	import com.Leo.utils.LeoBitmapResizer;
+	import com.Leo.utils.UIScrollVerticalMaker;
+	import com.Leo.utils.dFormat;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
@@ -14,6 +16,8 @@ package UI
 		private var _triangle:Sprite = new Sprite;
 		private var _btnExpand:Sprite = new Sprite;
 		private var _mask:Shape = new Shape;
+		private var _idx:int = 0;
+		private var _scroller:UIScrollVerticalMaker;
 		public function UITransactionGroup(prID:String)
 		{
 			super(prID);
@@ -27,8 +31,6 @@ package UI
 			imgExpand.x = -imgExpand.width * 0.5;
 			imgExpand.y = -imgExpand.height * 0.5;
 			_btnExpand.addChild(imgExpand);
-			
-			trace(this.height);
 			
 			_btnExpand.y = this.height*0.5;
 			_btnExpand.x = Statics.STAGEWIDTH - Math.round(_btnExpand.height*1.5);
@@ -50,8 +52,34 @@ package UI
 			_triangle.y = this.height+_triangle.height;
 			_triangle.x = Statics.STAGEWIDTH - _triangle.width*2;
 			
+			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,this.height*3);
 			
 			_btnExpand.addEventListener(MouseEvent.CLICK, clickHandler);
+		}
+		
+		public function addTransaction(prAmount:Number, prCategory):void {
+			var o:Object = {
+				amount: prAmount,
+				category: prCategory
+			};
+			
+			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o);
+			_idx++;
+			
+			_scroller.attachVertical(lcTranItem);
+			
+			if (!stage) {
+				_sum += prAmount;
+				_txtSum.text = dFormat(_sum);
+			}else{
+				var tmpO:Object = {a:_sum};
+				Statics.tLite(tmpO,1,{a:_sum+=prAmount, onUpdate:function():void {
+					_txtSum.text = dFormat(tmpO.a);
+				},onComplete:function():void {
+					delete tmpO.a;
+					tmpO = null;
+				}});
+			}
 		}
 		
 		protected function clickHandler(event:MouseEvent):void
