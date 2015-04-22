@@ -1,5 +1,6 @@
 package
 {
+	import com.Leo.ui.CAAGrid;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageQuality;
@@ -24,7 +25,17 @@ package
 		}
 		
 		private function buildUI():void {
-			addChild(Statics.PAGELOGIN);
+			//addChild(Statics.PAGELOGIN);
+			var grid:CAAGrid = new CAAGrid(Math.round(Statics.STAGEWIDTH*0.8),Math.round(Statics.STAGEHEIGHT*0.9), Math.round(Statics.STAGEHEIGHT*0.02),15,10,1,0xffffff,Math.round(Statics.STAGEHEIGHT*0.1),
+			function(prX:int,prY:int):void {
+				trace(prX + ', ' + prY);
+			},
+			function(prX:int,prY:int):void {
+				trace('Final: ' + prX + ', ' + prY);
+			});
+			grid.x = Math.round(Statics.STAGEWIDTH*0.1);
+			grid.y = Math.round(Statics.STAGEHEIGHT*0.05);
+			addChild(grid);
 		}
 		
 	}
