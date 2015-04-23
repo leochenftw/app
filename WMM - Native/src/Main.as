@@ -40,22 +40,25 @@ package
 			var grid:AdvancedGrid = new AdvancedGrid(Math.round(Statics.STAGEWIDTH*0.8),Math.round(Statics.STAGEHEIGHT*0.9), Math.round(Statics.STAGEHEIGHT*0.02),15,10,1,0xffffff,Math.round(Statics.STAGEHEIGHT*0.1));
 			grid.x = Math.round(Statics.STAGEWIDTH*0.1);
 			grid.y = Math.round(Statics.STAGEHEIGHT*0.05);
+			grid.addEventListener(GridEvent.ON_START, onStart);
+			grid.addEventListener(GridEvent.ON_UPDATE, onUpdate);
+			grid.addEventListener(GridEvent.ON_COMPLETE, onComplete);
 			addChild(grid);
 		}
 		
 		protected function onComplete(e:Event):void
 		{
-			trace(e.target.gridx);
+			trace('onComplete: ' + e.target.x);
 		}
 		
 		protected function onUpdate(e:Event):void
 		{
-			trace(e.target.gridx);
+			trace('onDrag: ' + e.target.x);
 		}
 		
 		protected function onStart(e:Event):void
 		{
-			trace(e.target.gridx);
+			trace('onStart: ' + e.target.x);
 		}
 		
 	}
