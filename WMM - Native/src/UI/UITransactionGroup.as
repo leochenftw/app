@@ -1,5 +1,6 @@
 package UI
 {
+	import com.ruochi.shape.Rect;
 	import com.Leo.utils.LeoBitmapResizer;
 	import com.Leo.utils.UIScrollVerticalMaker;
 	import com.Leo.utils.dFormat;
@@ -19,6 +20,7 @@ package UI
 		private var _idx:int = 0;
 		private var _scroller:UIScrollVerticalMaker;
 		private var _parentScroller:UIScrollVerticalMaker;
+		private var _btnRealExpand:Rect;
 		public function UITransactionGroup(prID:String,parentScroller:UIScrollVerticalMaker)
 		{
 			super(prID);
@@ -49,10 +51,14 @@ package UI
 			_triangle.y = this.height+_triangle.height;
 			_triangle.x = Statics.STAGEWIDTH - _triangle.width*2;
 			
-			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,this.height*3);
+			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,this.height*3,0,0,'',_parentScroller);
 			removeChild(_scroller);
 			_scroller.y = this.height;
-			_btnExpand.addEventListener(MouseEvent.CLICK, clickHandler);
+			_btnRealExpand = new Rect(this.width - _txtSum.x - _txtSum.width,this.height,0xffffff);
+			_btnRealExpand.alpha = 0;
+			_btnRealExpand.x = _txtSum.x + _txtSum.width;
+			addChild(_btnRealExpand);
+			_btnRealExpand.addEventListener(MouseEvent.CLICK, clickHandler);
 		}
 		
 		public function addTransaction(prAmount:Number, prCategory):void {
@@ -105,15 +111,17 @@ package UI
 				Statics.tLite(_btnExpand, 0.25, {rotation: 90});
 				Statics.tLite(_triangle, 0.25, {y: ty});
 				_parentScroller.expand(this,ty*3);
-				_parentScroller.scrollEnabled = false;
+				//_parentScroller.scrollEnabled = false;
 			}else{
-				removeChild(_scroller);
+				if (_scroller && contains(_scroller)) {
+					removeChild(_scroller);
+				}
 				_parentScroller.collapse(this,ty*3);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 0});
 				Statics.tLite(_triangle, 0.25, {y: ty+_triangle.height, onComplete:function():void {
 					removeChild(_triangle);
 					removeChild(_mask);
-					_parentScroller.scrollEnabled = true;
+					//_parentScroller.scrollEnabled = true;
 				}});
 			}
 		}

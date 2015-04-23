@@ -1,14 +1,10 @@
 package
 {
-	import com.Leo.events.GridEvent;
-	import com.Leo.ui.AdvancedGrid;
-	import com.Leo.ui.CAAGrid;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
 	
 	[SWF(backgroundColor='#1f253d', frameRate='120')]
 	public class Main extends Sprite
@@ -29,37 +25,9 @@ package
 		}
 		
 		private function buildUI():void {
-			//addChild(Statics.PAGELOGIN);
-//			var grid:CAAGrid = new CAAGrid(Math.round(Statics.STAGEWIDTH*0.8),Math.round(Statics.STAGEHEIGHT*0.9), Math.round(Statics.STAGEHEIGHT*0.02),15,10,1,0xffffff,Math.round(Statics.STAGEHEIGHT*0.1));
-//			grid.addEventListener(GridEvent.ON_START, onStart);
-//			grid.addEventListener(GridEvent.ON_UPDATE, onUpdate);
-//			grid.addEventListener(GridEvent.ON_COMPLETE, onComplete);
-//			grid.x = Math.round(Statics.STAGEWIDTH*0.1);
-//			grid.y = Math.round(Statics.STAGEHEIGHT*0.05);
-//			addChild(grid);
-			var grid:AdvancedGrid = new AdvancedGrid(Math.round(Statics.STAGEWIDTH*0.8),Math.round(Statics.STAGEHEIGHT*0.9), Math.round(Statics.STAGEHEIGHT*0.02),15,10,1,0xffffff,Math.round(Statics.STAGEHEIGHT*0.1));
-			grid.x = Math.round(Statics.STAGEWIDTH*0.1);
-			grid.y = Math.round(Statics.STAGEHEIGHT*0.05);
-			grid.addEventListener(GridEvent.ON_START, onStart);
-			grid.addEventListener(GridEvent.ON_UPDATE, onUpdate);
-			grid.addEventListener(GridEvent.ON_COMPLETE, onComplete);
-			addChild(grid);
+			addChild(Statics.PAGELOGIN);
 		}
 		
-		protected function onComplete(e:Event):void
-		{
-			trace('onComplete: ' + e.target.x);
-		}
-		
-		protected function onUpdate(e:Event):void
-		{
-			trace('onDrag: ' + e.target.x);
-		}
-		
-		protected function onStart(e:Event):void
-		{
-			trace('onStart: ' + e.target.x);
-		}
 		
 	}
 }

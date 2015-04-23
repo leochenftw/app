@@ -12,6 +12,7 @@ package UI
 			this.graphics.drawRect(0,0,Statics.STAGEWIDTH, Math.round(Statics.STAGEHEIGHT*0.11));
 			this.graphics.endFill();
 			_data = data;
+			_txtDate.text = _data.category;
 			_txtSum.text = dFormat(Math.abs(data.amount).toFixed(2));
 			
 			if (data.amount<0) {
