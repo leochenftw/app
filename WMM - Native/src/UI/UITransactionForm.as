@@ -2,6 +2,7 @@ package UI
 {
 	import com.Leo.utils.LeoButton;
 	import com.Leo.utils.LeoInput;
+	import com.danielfreeman.madcomponents.UILabel;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -21,6 +22,7 @@ package UI
 		private var _callback:Function;
 		private var _txtMemo:LeoInput;
 		private var _prefix:int = 1;
+		private var _lblAmount:UILabel;
 		public function UITransactionForm(inout:Boolean, callback:Function, data:Object = null,fullMode:Boolean = false)
 		{
 			_prefix = inout?1:-1;
@@ -47,9 +49,15 @@ package UI
 		
 		protected function createMinUI(event:Event):void
 		{
+			this.removeEventListener(Event.ADDED_TO_STAGE, createMinUI);
 			_txtAmount.graphics.beginFill(0xffffff,1);
 			_txtAmount.graphics.drawRect(0,0,Statics.STAGEWIDTH - _x*2,Math.round(Statics.STAGEHEIGHT*0.1));
 			_txtAmount.graphics.endFill();
+			
+			_lblAmount = new UILabel(_txtAmount, _x,0,'$0.00', Statics.FONTSTYLES['date-label']);
+			_lblAmount.y = Math.round((_txtAmount.height - _lblAmount.height*2 + _lblAmount.textHeight)*0.5);
+			
+			_txtAmount.addEventListener(MouseEvent.CLICK, startPin);
 			
 			_spCat.graphics.beginFill(0xffffff,1);
 			_spCat.graphics.drawRect(0,0,Statics.STAGEWIDTH - _x*2,Math.round(Statics.STAGEHEIGHT*0.1));
@@ -85,6 +93,12 @@ package UI
 			
 			//this.addEventListener(Event.ENTER_FRAME, layoutMin);
 			_btnSubmit.addEventListener(MouseEvent.CLICK, submitHandler);
+		}
+		
+		protected function startPin(e:MouseEvent):void
+		{
+			stage.addChild(Statics.PINPAD);
+			Statics.PINPAD.label = _lblAmount;
 		}
 		
 		protected function submitHandler(e:MouseEvent):void

@@ -1,5 +1,6 @@
 package
 {
+	import com.Leo.ui.LeoPinpad;
 	import com.Leo.utils.Navigator;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
@@ -31,6 +32,7 @@ package
 		public static var TOPBAR:UITopBar;
 		public static var FONTSTYLES:Dictionary = new Dictionary;
 		public static var ASSETS:Dictionary = new Dictionary;
+		public static var PINPAD:LeoPinpad;
 		
 		public function Statics()
 		{

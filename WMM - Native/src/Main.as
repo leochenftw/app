@@ -1,6 +1,5 @@
 package
 {
-	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageQuality;
@@ -27,6 +26,7 @@ package
 		private function buildUI():void {
 			addChild(Statics.PAGELOGIN);
 		}
+		
 		
 		
 	}

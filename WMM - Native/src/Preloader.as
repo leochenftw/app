@@ -1,5 +1,6 @@
 package
 {
+	import com.Leo.ui.LeoPinpad;
 	import com.Leo.utils.Navigator;
 	
 	import flash.display.Sprite;
@@ -19,6 +20,8 @@ package
 			Statics.FONTSTYLES['date-label'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0x212121,null,null,null,null,null,'left');
 			Statics.FONTSTYLES['income'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0x10BEC6,null,null,null,null,null,'right');
 			Statics.FONTSTYLES['expense'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0xE46752,null,null,null,null,null,'right');
+			
+			Statics.PINPAD = new LeoPinpad;
 			
 			Statics.PAGELOGIN = new PageLogin;
 			Statics.PAGEOVERVIEW = new PageOverview;
