@@ -21,7 +21,7 @@ package
 			Statics.FONTSTYLES['income'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0x10BEC6,null,null,null,null,null,'right');
 			Statics.FONTSTYLES['expense'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0xE46752,null,null,null,null,null,'right');
 			
-			Statics.PINPAD = new LeoPinpad;
+			Statics.PINPAD = new LeoPinpad(true);
 			
 			Statics.PAGELOGIN = new PageLogin;
 			Statics.PAGEOVERVIEW = new PageOverview;

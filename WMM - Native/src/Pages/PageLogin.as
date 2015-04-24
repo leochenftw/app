@@ -29,7 +29,7 @@ package Pages
 			_icoPass = LeoBitmapResizer.resize(FileIO.getImage('pass'),0,Math.round(Statics.STAGEHEIGHT*0.035));
 			
 			_icoEmail.x = Statics.STAGEWIDTH*0.02;
-			_icoPass.x = Statics.STAGEWIDTH*0.028;
+			_icoPass.x = _icoEmail.x + Math.round((_icoEmail.width - _icoEmail.width)*0.5);
 			
 			
 			var logoImage:Bitmap = LeoBitmapResizer.resize(FileIO.getImage('logo'),0,Math.round(Statics.STAGEWIDTH * 0.8));
@@ -39,7 +39,7 @@ package Pages
 			addChild(_logo);
 			
 			_txtUsername = new LeoInput(int(Statics.STAGEWIDTH*0.9-_icoEmail.width-_icoEmail.x*2),int(Statics.STAGEHEIGHT*0.035),this,"", Statics.FONTSTYLES['logoin-input'],false,0,"Email address",0,'left');
-			_txtPassword = new LeoInput(int(Statics.STAGEWIDTH*0.9-_icoPass.width-_icoPass.x*2),int(Statics.STAGEHEIGHT*0.035),this,"", Statics.FONTSTYLES['logoin-input'],false,0,"Password",0,'left');
+			_txtPassword = new LeoInput(int(Statics.STAGEWIDTH*0.9-_icoEmail.width-_icoEmail.x*2),int(Statics.STAGEHEIGHT*0.035),this,"", Statics.FONTSTYLES['logoin-input'],false,0,"Password",0,'left');
 			
 			_txtPassword.displayAsPassword = true;
 			

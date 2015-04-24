@@ -1,5 +1,6 @@
 package UI
 {
+	import com.Leo.utils.pf;
 	import com.Leo.utils.LeoButton;
 	import com.Leo.utils.LeoInput;
 	import com.danielfreeman.madcomponents.UILabel;
@@ -65,7 +66,7 @@ package UI
 			
 			_txtCat = new LeoInput(Statics.STAGEWIDTH*0.62,Math.round(_spCat.height*0.5),this,'',Statics.FONTSTYLES['date-label'],false,0,'Category');
 			_txtCat.x = _x;
-			_txtCat.y = Math.round((_spCat.height - _txtCat.height)*0.5);
+			_txtCat.y = Math.round((_spCat.height - _txtCat.textHeight)*0.5);
 			_spCat.x = _x;
 			_spCat.addChild(_txtCat);
 			_btnFullmode = new LeoButton(_txtAmount.height,0,'...',0xffffff,0x000000,0.2,0.4);
@@ -103,7 +104,7 @@ package UI
 		
 		protected function submitHandler(e:MouseEvent):void
 		{
-			_callback(_txtCat.text,66.68*_prefix);
+			_callback(_txtCat.text,pf(_lblAmount.text)*_prefix);
 		}
 		
 		public function dispose():void {
