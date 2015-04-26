@@ -6,6 +6,8 @@ package
 	import flash.display.Sprite;
 	import flash.text.TextFormat;
 	
+	import Managers.DBManager;
+	
 	import Pages.PageLogin;
 	import Pages.PageOverview;
 	
@@ -31,7 +33,7 @@ package
 			
 			Statics.NAV = new Navigator(Statics.STAGE,Statics.PAGES,'vertical',0.5);
 			
-			_callback.call();
+			Statics.DB = new DBManager(_callback);
 		}
 	}
 }

@@ -1,11 +1,23 @@
 package UI
 {
+	import com.Leo.utils.pf;
+	import com.Leo.utils.LeoBitmapResizer;
 	import com.Leo.utils.dFormat;
+	import com.ruochi.shape.Rect;
+	
+	import flash.display.Bitmap;
+	import flash.events.MouseEvent;
+	
+	import Managers.AssetManager;
+
 	public class UITransactionItem extends UITransactionMaster
 	{
 		private var _data:Object;
-		public function UITransactionItem(prID:String,data:Object)
+		private var _btnEdit:Rect;
+		private var _parentGroup:UITransactionGroup;
+		public function UITransactionItem(prID:String,data:Object,parentGroup)
 		{
+			_parentGroup = parentGroup;
 			super(prID);
 			this.graphics.clear();
 			this.graphics.beginFill(0xf6f6f6);
@@ -26,6 +38,36 @@ package UI
 			this.graphics.lineStyle(1,0xD5D5D5);
 			this.graphics.moveTo(0,this.height);
 			this.graphics.lineTo(Statics.STAGEWIDTH,this.height);
+			
+			var imgPencil:Bitmap = AssetManager.getImage('edit');
+			imgPencil = LeoBitmapResizer.resize(imgPencil,0,Math.round(this.height*0.35));
+			imgPencil.y = Math.round((this.height - imgPencil.height)*0.5);
+			imgPencil.x = this.width - imgPencil.width*2;
+			imgPencil.alpha = 0.5;
+			addChild(imgPencil);
+			
+			_btnEdit = new Rect(this.width - _txtSum.x - _txtSum.width,this.height,0xffffff);
+			_btnEdit.alpha = 0;
+			_btnEdit.x = _txtSum.x + _txtSum.width;
+			addChild(_btnEdit);
+			_btnEdit.addEventListener(MouseEvent.CLICK, clickHandler);
+		}
+		
+		protected function clickHandler(e:MouseEvent):void
+		{
+			var edit:UITransactionEditForm = new UITransactionEditForm(this);
+			stage.addChild(edit);
+		}
+		
+		public function get data():Object {
+			return _data;
+		}
+		
+		public function update():void {
+			var dif:Number = _data.amount - pf(_txtSum.text)*(_data.amount < 0?-1:1);
+			_txtDate.text = _data.category;
+			_txtSum.text = dFormat(Math.abs(_data.amount));
+			_parentGroup.update(dif);
 		}
 	}
 }

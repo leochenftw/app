@@ -9,7 +9,7 @@ package Pages
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import Managers.FileIO;
+	import Managers.AssetManager;
 
 	public class PageLogin extends Page
 	{
@@ -25,14 +25,14 @@ package Pages
 		public function PageLogin()
 		{
 			
-			_icoEmail = LeoBitmapResizer.resize(FileIO.getImage('email'),0,Math.round(Statics.STAGEHEIGHT*0.035));
-			_icoPass = LeoBitmapResizer.resize(FileIO.getImage('pass'),0,Math.round(Statics.STAGEHEIGHT*0.035));
+			_icoEmail = LeoBitmapResizer.resize(AssetManager.getImage('email'),0,Math.round(Statics.STAGEHEIGHT*0.035));
+			_icoPass = LeoBitmapResizer.resize(AssetManager.getImage('pass'),0,Math.round(Statics.STAGEHEIGHT*0.035));
 			
 			_icoEmail.x = Statics.STAGEWIDTH*0.02;
 			_icoPass.x = _icoEmail.x + Math.round((_icoEmail.width - _icoEmail.width)*0.5);
 			
 			
-			var logoImage:Bitmap = LeoBitmapResizer.resize(FileIO.getImage('logo'),0,Math.round(Statics.STAGEWIDTH * 0.8));
+			var logoImage:Bitmap = LeoBitmapResizer.resize(AssetManager.getImage('logo'),0,Math.round(Statics.STAGEWIDTH * 0.8));
 			_logo.addChild(logoImage);
 			_logo.x = Math.round(Statics.STAGEWIDTH*0.1);
 			
@@ -59,7 +59,6 @@ package Pages
 			_wrapperPass.y = _wrapperUser.height + _txtUsername.height -1;
 			_frmLogin.addChild(_wrapperUser);
 			_frmLogin.addChild(_wrapperPass);
-			
 			
 			_wrapperUser.addChild(lcLine);
 			_wrapperPass.addChild(lcLineII);

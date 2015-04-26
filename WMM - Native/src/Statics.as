@@ -8,7 +8,8 @@ package
 	import flash.display.Stage;
 	import flash.utils.Dictionary;
 	
-	import Managers.FileIO;
+	import Managers.AssetManager;
+	import Managers.DBManager;
 	
 	import Pages.Page;
 	import Pages.PageLogin;
@@ -27,12 +28,13 @@ package
 		public static var PAGEOVERVIEW:PageOverview;
 		public static var STAGEHEIGHT:int;
 		public static var STAGEWIDTH:int;
-		public static var IO:FileIO;
+		public static var IO:AssetManager;
 		public static var NAV:Navigator;
 		public static var TOPBAR:UITopBar;
 		public static var FONTSTYLES:Dictionary = new Dictionary;
 		public static var ASSETS:Dictionary = new Dictionary;
 		public static var PINPAD:LeoPinpad;
+		public static var DB:DBManager;
 		
 		public function Statics()
 		{

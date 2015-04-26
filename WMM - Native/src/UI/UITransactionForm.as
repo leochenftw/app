@@ -18,23 +18,19 @@ package UI
 		private var _txtCat:LeoInput;
 		private var _btnFullmode:LeoButton;
 		private var _btnSubmit:LeoButton;
-		private var _data:Object;
 		private const _x:Number = Math.round(Statics.STAGEWIDTH*0.05);
 		private var _callback:Function;
 		private var _txtMemo:LeoInput;
 		private var _prefix:int = 1;
 		private var _lblAmount:UILabel;
-		public function UITransactionForm(inout:Boolean, callback:Function, data:Object = null,fullMode:Boolean = false)
+		public function UITransactionForm(inout:Boolean, callback:Function, fullMode:Boolean = false)
 		{
 			_prefix = inout?1:-1;
 			_bgc = inout?0x10BEC6:0xE46752;
 			_callback = callback;
-			_data = data;
 			
-			if (!_data){
-				if (!fullMode) {
-					this.addEventListener(Event.ADDED_TO_STAGE, createMinUI);
-				}
+			if (!fullMode) {
+				this.addEventListener(Event.ADDED_TO_STAGE, createMinUI);
 			}else{
 				this.addEventListener(Event.ADDED_TO_STAGE, createFullUI);
 			}
@@ -57,6 +53,7 @@ package UI
 			
 			_lblAmount = new UILabel(_txtAmount, _x,0,'$0.00', Statics.FONTSTYLES['date-label']);
 			_lblAmount.y = Math.round((_txtAmount.height - _lblAmount.height*2 + _lblAmount.textHeight)*0.5);
+			_lblAmount.fixwidth = _txtAmount.width - _x*2;
 			
 			_txtAmount.addEventListener(MouseEvent.CLICK, startPin);
 			
@@ -115,7 +112,6 @@ package UI
 			_txtCat  = null;
 			_btnFullmode = null;
 			_btnSubmit = null;
-			_data = null;
 			_txtMemo = null;
 		}
 	}

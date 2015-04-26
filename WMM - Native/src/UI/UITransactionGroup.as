@@ -1,16 +1,16 @@
 package UI
 {
-	import com.ruochi.shape.Rect;
 	import com.Leo.utils.LeoBitmapResizer;
 	import com.Leo.utils.UIScrollVerticalMaker;
 	import com.Leo.utils.dFormat;
+	import com.ruochi.shape.Rect;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import Managers.FileIO;
+	import Managers.AssetManager;
 
 	public class UITransactionGroup extends UITransactionMaster
 	{
@@ -29,7 +29,7 @@ package UI
 			_mask.graphics.drawRect(0,0,Statics.STAGEWIDTH, Math.round(Statics.STAGEHEIGHT*0.11)+1);
 			_mask.graphics.endFill();
 						
-			var imgExpand:Bitmap = FileIO.getImage('arrow');
+			var imgExpand:Bitmap = AssetManager.getImage('arrow');
 			imgExpand = LeoBitmapResizer.resize(imgExpand,0,Math.round(this.height*0.35));
 			imgExpand.x = -imgExpand.width * 0.5;
 			imgExpand.y = -imgExpand.height * 0.5;
@@ -43,7 +43,7 @@ package UI
 			this.graphics.moveTo(0,this.height);
 			this.graphics.lineTo(Statics.STAGEWIDTH,this.height);
 			
-			var imgTriangle:Bitmap = FileIO.getImage('arrow-s');;
+			var imgTriangle:Bitmap = AssetManager.getImage('arrow-s');;
 			imgTriangle = LeoBitmapResizer.resize(imgTriangle,0,Math.round(this.height*0.35));
 			_triangle.addChild(imgTriangle);
 			
@@ -63,11 +63,13 @@ package UI
 		
 		public function addTransaction(prAmount:Number, prCategory):void {
 			var o:Object = {
+				date: _id,
 				amount: prAmount,
-				category: prCategory
+				category: prCategory,
+				description: ''
 			};
 			
-			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o);
+			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o,this);
 			_idx++;
 			
 			_scroller.attachVertical(lcTranItem);
@@ -83,7 +85,7 @@ package UI
 					_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
 				}
 			}else{
-				var tmpO:Object = {a:_sum};
+				/*var tmpO:Object = {a:_sum};
 				Statics.tLite(tmpO,1,{a:_sum+=prAmount, onUpdate:function():void {
 					_txtSum.text = dFormat(Math.abs(tmpO.a));
 					if (tmpO.a<0) {
@@ -94,9 +96,11 @@ package UI
 						_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
 					}
 				},onComplete:function():void {
+					_sum = tmpO.a;
 					delete tmpO.a;
 					tmpO = null;
-				}});
+				}});*/
+				update(prAmount);
 			}
 		}
 		
@@ -124,6 +128,24 @@ package UI
 					//_parentScroller.scrollEnabled = true;
 				}});
 			}
+		}
+		
+		public function update(prAmount:Number):void {
+			var tmpO:Object = {a:_sum};
+			Statics.tLite(tmpO,1,{a:_sum+=prAmount, onUpdate:function():void {
+				_txtSum.text = dFormat(Math.abs(tmpO.a));
+				if (tmpO.a<0) {
+					_txtSum.setTextFormat(Statics.FONTSTYLES['expense']);
+					_txtSum.defaultTextFormat = Statics.FONTSTYLES['expense'];
+				}else{
+					_txtSum.setTextFormat(Statics.FONTSTYLES['income']);
+					_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
+				}
+			},onComplete:function():void {
+				_sum = tmpO.a;
+				delete tmpO.a;
+				tmpO = null;
+			}});
 		}
 	}
 }
