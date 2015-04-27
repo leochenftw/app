@@ -1,21 +1,23 @@
 package UI
 {
-	import com.Leo.utils.pf;
 	import com.Leo.utils.LeoBitmapResizer;
 	import com.Leo.utils.dFormat;
+	import com.Leo.utils.pf;
 	import com.ruochi.shape.Rect;
 	
 	import flash.display.Bitmap;
 	import flash.events.MouseEvent;
 	
+	import DataTypes.TypeTransaction;
+	
 	import Managers.AssetManager;
 
 	public class UITransactionItem extends UITransactionMaster
 	{
-		private var _data:Object;
+		private var _data:TypeTransaction;
 		private var _btnEdit:Rect;
 		private var _parentGroup:UITransactionGroup;
-		public function UITransactionItem(prID:String,data:Object,parentGroup)
+		public function UITransactionItem(prID:String,data:TypeTransaction,parentGroup)
 		{
 			_parentGroup = parentGroup;
 			super(prID);
@@ -59,7 +61,7 @@ package UI
 			stage.addChild(edit);
 		}
 		
-		public function get data():Object {
+		public function get data():TypeTransaction {
 			return _data;
 		}
 		
@@ -68,6 +70,10 @@ package UI
 			_txtDate.text = _data.category;
 			_txtSum.text = dFormat(Math.abs(_data.amount));
 			_parentGroup.update(dif);
+			
+			Statics.DB.updateTrans(_data,{tid:_data.tid},function():void{
+				
+			});
 		}
 	}
 }

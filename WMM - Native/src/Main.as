@@ -24,6 +24,7 @@ package
 		}
 		
 		private function buildUI():void {
+			
 			addChild(Statics.PAGELOGIN);
 		}
 		

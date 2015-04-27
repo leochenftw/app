@@ -35,6 +35,7 @@ package
 		public static var ASSETS:Dictionary = new Dictionary;
 		public static var PINPAD:LeoPinpad;
 		public static var DB:DBManager;
+		//public static var TRANS:Dictionary = new Dictionary;
 		
 		public function Statics()
 		{

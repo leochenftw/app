@@ -7,6 +7,8 @@ package Pages
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	
+	import DataTypes.TypeTransaction;
+	
 	import UI.UITopBar;
 	import UI.UITransactionForm;
 	import UI.UITransactionGroup;
@@ -34,10 +36,6 @@ package Pages
 			
 			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH, Statics.STAGEHEIGHT-(_btnExpense.y + _btnExpense.height), 0, 0);
 			_scroller.y = _btnExpense.y + _btnExpense.height;
-			/*for (var i:int = 0; i < 10; i++){
-				var g:UITransactionGroup = new UITransactionGroup(i.toString(),_scroller);
-				_scroller.attachVertical(g);
-			}*/
 			
 			_btnIncome.addEventListener(MouseEvent.CLICK, clickHandler);
 			_btnExpense.addEventListener(MouseEvent.CLICK, clickHandler);
@@ -71,14 +69,12 @@ package Pages
 			}
 			
 			_frm = new UITransactionForm(b,function(prCat:String, prAmount:Number):void {
-				var lcGroup:UITransactionGroup = new UITransactionGroup(DateFormatter(new Date),_scroller);
-				
-				var tmpID:String = DateFormatter(new Date());//+i.toString();
+				var tmpID:String = DateFormatter(new Date());
 				
 				if (_items[tmpID] === undefined) {
 					var item:UITransactionGroup = new UITransactionGroup(tmpID,_scroller);
 					item.addTransaction(prAmount,prCat);
-					_scroller.attachVertical(item);
+					_scroller.prependVertical(item);
 					_items[item.id] = item;
 				}else{
 					(_items[tmpID] as UITransactionGroup).addTransaction(prAmount, prCat);
@@ -90,6 +86,18 @@ package Pages
 			_frm.name = fn;
 			_frm.y = e.currentTarget.y + e.currentTarget.height;
 			addChild(_frm);
+		}
+		
+		public function dbFeed(o:TypeTransaction):void {
+			var tmpID:String = (o.date<10?'0':'')+o.date.toString() + '/' + (o.month<10?'0':'')+o.month.toString() + '/' + o.year.toString();
+			if (_items[tmpID] === undefined) {
+				var item:UITransactionGroup = new UITransactionGroup(tmpID,_scroller);
+				item.dbFeed(o);
+				_scroller.prependVertical(item);
+				_items[tmpID] = item;
+			}else{
+				(_items[tmpID] as UITransactionGroup).dbFeed(o);
+			}
 		}
 	}
 }

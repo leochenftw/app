@@ -10,6 +10,8 @@ package UI
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
+	import DataTypes.TypeTransaction;
+	
 	import Managers.AssetManager;
 
 	public class UITransactionGroup extends UITransactionMaster
@@ -17,10 +19,10 @@ package UI
 		private var _triangle:Sprite = new Sprite;
 		private var _btnExpand:Sprite = new Sprite;
 		private var _mask:Shape = new Shape;
-		private var _idx:int = 0;
 		private var _scroller:UIScrollVerticalMaker;
 		private var _parentScroller:UIScrollVerticalMaker;
 		private var _btnRealExpand:Rect;
+		private var _lst:Vector.<int> = new Vector.<int>;
 		public function UITransactionGroup(prID:String,parentScroller:UIScrollVerticalMaker)
 		{
 			super(prID);
@@ -51,7 +53,7 @@ package UI
 			_triangle.y = this.height+_triangle.height;
 			_triangle.x = Statics.STAGEWIDTH - _triangle.width*2;
 			
-			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,this.height*3,0,0,'',_parentScroller);
+			_scroller = new UIScrollVerticalMaker(this,Statics.STAGEWIDTH,0,0,0,'',_parentScroller);
 			removeChild(_scroller);
 			_scroller.y = this.height;
 			_btnRealExpand = new Rect(this.width - _txtSum.x - _txtSum.width,this.height,0xffffff);
@@ -61,21 +63,15 @@ package UI
 			_btnRealExpand.addEventListener(MouseEvent.CLICK, clickHandler);
 		}
 		
-		public function addTransaction(prAmount:Number, prCategory):void {
-			var o:Object = {
-				date: _id,
-				amount: prAmount,
-				category: prCategory,
-				description: ''
-			};
-			
-			var lcTranItem:UITransactionItem = new UITransactionItem(_idx.toString(),o,this);
-			_idx++;
-			
+		public function dbFeed(o:TypeTransaction):void {
+			_lst.push(o.tid);
+			var lcTranItem:UITransactionItem = new UITransactionItem(o.tid.toString(),o,this);
 			_scroller.attachVertical(lcTranItem);
-			
+			if (_scroller.pureLayer.numChildren < 3 ) {
+				_scroller.height += lcTranItem.height;
+			}
 			if (!stage) {
-				_sum += prAmount;
+				_sum += o.amount;
 				_txtSum.text = dFormat(Math.abs(_sum));
 				if (_sum<0) {
 					_txtSum.setTextFormat(Statics.FONTSTYLES['expense']);
@@ -85,23 +81,45 @@ package UI
 					_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
 				}
 			}else{
-				/*var tmpO:Object = {a:_sum};
-				Statics.tLite(tmpO,1,{a:_sum+=prAmount, onUpdate:function():void {
-					_txtSum.text = dFormat(Math.abs(tmpO.a));
-					if (tmpO.a<0) {
+				update(o.amount);
+			}
+			
+		}
+		
+		public function addTransaction(prAmount:Number, prCategory:String):void {
+			var d:Date = new Date;
+			var o:TypeTransaction = new TypeTransaction;
+			o.date = int(_id.split('/')[0]);
+			o.month = int(_id.split('/')[1]);
+			o.year = int(_id.split('/')[2]);
+			o.category = prCategory;
+			o.amount = prAmount;
+			o.utcstamp = d.time.toString();
+			
+			var lcThis:UITransactionGroup = this;
+			Statics.DB.addTrans(o.category,o.amount,o.FullDate,o.description,o.utcstamp,function(tid:int):void {
+				o.tid = tid;
+				_lst.push(tid);
+				var lcTranItem:UITransactionItem = new UITransactionItem(tid.toString(),o,lcThis);
+				
+				_scroller.attachVertical(lcTranItem);
+				
+				if (!stage) {
+					_sum += prAmount;
+					_txtSum.text = dFormat(Math.abs(_sum));
+					if (_sum<0) {
 						_txtSum.setTextFormat(Statics.FONTSTYLES['expense']);
 						_txtSum.defaultTextFormat = Statics.FONTSTYLES['expense'];
 					}else{
 						_txtSum.setTextFormat(Statics.FONTSTYLES['income']);
 						_txtSum.defaultTextFormat = Statics.FONTSTYLES['income'];
 					}
-				},onComplete:function():void {
-					_sum = tmpO.a;
-					delete tmpO.a;
-					tmpO = null;
-				}});*/
-				update(prAmount);
-			}
+				}else{
+					update(prAmount);
+				}
+			});
+			
+			
 		}
 		
 		protected function clickHandler(event:MouseEvent):void
@@ -114,13 +132,13 @@ package UI
 				addChildAt(_scroller,0);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 90});
 				Statics.tLite(_triangle, 0.25, {y: ty});
-				_parentScroller.expand(this,ty*3);
+				_parentScroller.expand(this,ty*(_scroller.pureLayer.numChildren<3?_scroller.pureLayer.numChildren:3));
 				//_parentScroller.scrollEnabled = false;
 			}else{
 				if (_scroller && contains(_scroller)) {
 					removeChild(_scroller);
 				}
-				_parentScroller.collapse(this,ty*3);
+				_parentScroller.collapse(this,_scroller.height);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 0});
 				Statics.tLite(_triangle, 0.25, {y: ty+_triangle.height, onComplete:function():void {
 					removeChild(_triangle);

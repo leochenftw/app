@@ -6,6 +6,8 @@ package Managers
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	
+	import DataTypes.TypeTransaction;
+	
 
 	public class DBManager
 	{
@@ -36,7 +38,8 @@ package Managers
 				"amount NUMERIC," +
 				"description TEXT," +
 				"nid INTEGER," +
-				"utcstamp TEXT);";
+				"utcstamp TEXT," +
+				"uid INTEGER);";
 			sqls.execute();
 		}
 		
@@ -49,10 +52,11 @@ package Managers
 		{
 			sqls.removeEventListener(SQLEvent.RESULT, resault);
 			_callback.call();
-			
 		}
 		
 		public function addTrans(prCategory:String, prValue:Number, prDate:String, prDesc:String, utc:String, func:Function,nid:String = '0'):void {
+			prCategory = prCategory.replace(/\'/gi,"''");
+			prDesc = prDesc.replace(/\'/gi,"''");
 			var lcDate:Array = prDate.split('/');
 			var lcSQL:SQLStatement = new SQLStatement;
 			lcSQL.sqlConnection = sqlc;
@@ -64,18 +68,9 @@ package Managers
 			lcSQL.execute();
 		}
 		
-		public function updateTrans(o:Object,conditions:Object,func:Function):void {
+		public function updateTrans(o:TypeTransaction,conditions:Object,func:Function):void {
 			var lcSQL:SQLStatement = new SQLStatement;
 			lcSQL.sqlConnection = sqlc;
-			var strMid:String = '';
-			for (var key:String in o) {
-				if (strMid.length > 0) strMid += ","
-				strMid += key;
-				strMid += "='";
-				strMid += o[key].toString();
-				strMid += "'";
-			}
-			
 			var strCon:String = '';
 			for (var condition:String in conditions) {
 				if (strCon.length > 0) strCon += ","
@@ -85,18 +80,8 @@ package Managers
 				strCon += "'";
 			}
 			
-			lcSQL.text = "UPDATE trans SET "+strMid+" WHERE " + strCon;
+			lcSQL.text = "UPDATE trans SET "+o.dbUpdateString+" WHERE " + strCon;
 			lcSQL.addEventListener(SQLEvent.RESULT,function(e:SQLEvent):void {
-				for (var thisKey:String in o) {
-					delete o[thisKey];
-				}
-				for (var thatKey:String in conditions) {
-					delete conditions[thatKey];
-				}
-				
-				o = null;
-				condition = null;
-				
 				if (func) func();
 			});
 			lcSQL.execute();

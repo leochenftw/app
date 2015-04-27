@@ -19,11 +19,13 @@ package UI
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import DataTypes.TypeTransaction;
+	
 	import Managers.AssetManager;
 	
 	public class UITransactionEditForm extends Sprite
 	{
-		private var _data:Object;
+		private var _data:TypeTransaction;
 		private var _y:Number = Math.round(Statics.STAGEHEIGHT*0.11);
 		private var _x:Number = Math.round(Statics.STAGEWIDTH*0.05);
 		private var _screenBlocker:Sprite = new Sprite;
@@ -49,6 +51,7 @@ package UI
 			tranBMD.draw(transaction,null,null,null,null,true);
 			_fakeTransaction = new Bitmap(tranBMD,'auto',true);
 			_fakeTransaction.smoothing = true;
+			addChild(_fakeTransaction);
 			
 			_point = new Point(transaction.x,transaction.y);
 			_transY = transaction.localToGlobal(_point).y;
@@ -110,7 +113,7 @@ package UI
 			_btnEnter.x = _x*2 + _btnCancel.width;
 			_btnEnter.y = _btnCancel.y;
 			
-			_btnCal = new LeoButton(Math.round(Statics.STAGEHEIGHT*0.1),0,_data.date,0x212121,0xffffff,1,0.4);
+			_btnCal = new LeoButton(Math.round(Statics.STAGEHEIGHT*0.1),0,_data.FullDate,0x212121,0xffffff,1,0.4);
 			addChild(_btnCal);
 			_btnCal.width = Statics.STAGEWIDTH - _x*2;
 			_btnCal.x = _x;
@@ -121,11 +124,11 @@ package UI
 			imgCal.y = Math.round((_btnCal.height - imgCal.height)*0.5);
 			_btnCal.addChild(imgCal);
 			_btnCal.labelObject.fixwidth = _btnCal.width - _x*3 - imgCal.width;
-			if (Statics.FONTSTYLES['calendar'] == undefined){
-				Statics.FONTSTYLES['calendar'] = new TextFormat("Myriad Pro", _btnCal.height*0.4,0x212121,null,null,null,null,null,'left');
-			}
-			_btnCal.labelObject.defaultTextFormat = Statics.FONTSTYLES['calendar'];
-			_btnCal.labelObject.setTextFormat(Statics.FONTSTYLES['calendar']);
+//			if (Statics.FONTSTYLES['calendar'] == undefined){
+//				Statics.FONTSTYLES['calendar'] = new TextFormat("Myriad Pro", _btnCal.height*0.4,0x212121,null,null,null,null,null,'left');
+//			}
+			_btnCal.labelObject.defaultTextFormat = Statics.FONTSTYLES['date-label'];
+			_btnCal.labelObject.setTextFormat(Statics.FONTSTYLES['date-label']);
 			_btnCal.labelObject.x = _x;
 			
 			
@@ -140,7 +143,7 @@ package UI
 			_txtMemo.y = _x;
 			_txtMemo.type = 'input';
 			_txtMemo.multiline = true;
-			_txtMemo.defaultTextFormat = Statics.FONTSTYLES['calendar'];
+			_txtMemo.defaultTextFormat = Statics.FONTSTYLES['date-label'];
 			if (_data.description.length > 0) {
 				_txtMemo.text = _data.description;
 			}else{
@@ -188,17 +191,14 @@ package UI
 		protected function clickCancel(e:MouseEvent = null,updateData:Boolean = false):void
 		{
 			var lcThis:UITransactionEditForm = this;
-			Statics.tLite(this,0.25,{y:Statics.STAGEHEIGHT, onUpdate:function():void {
-				if (lcThis.y >= _transY && contains(_fakeTransaction)) {
-					removeChild(_fakeTransaction);
-				}
-			},onComplete:function():void {
+			Statics.tLite(this,0.25,{y:Statics.STAGEHEIGHT, onComplete:function():void {
 				if (updateData) {
 					_data.amount = pf(_lblAmount.text)*(_data.amount < 0?-1:1);
 					_data.description = _txtMemo.text == 'What is this transaction about?'?'':trim(_txtMemo.text);
 					_data.category = trim(_txtCat.text);
 					_transaction.update();
 				}
+				removeChild(_fakeTransaction);
 				stage.removeChild(_screenBlocker);
 				stage.removeChild(lcThis);
 			}});
@@ -212,11 +212,7 @@ package UI
 			
 			this.y = Statics.STAGEHEIGHT;
 			var lcThis:UITransactionEditForm = this;
-			Statics.tLite(this,0.25,{y:0, onUpdate:function():void {
-				if (lcThis.y <= _transY && !contains(_fakeTransaction)) {
-					addChild(_fakeTransaction);
-				}
-			}});
+			Statics.tLite(this,0.25,{y:0});
 		}
 		
 		protected function offStage(e:Event):void

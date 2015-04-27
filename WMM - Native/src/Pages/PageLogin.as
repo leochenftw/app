@@ -9,6 +9,8 @@ package Pages
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
+	import DataTypes.TypeTransaction;
+	
 	import Managers.AssetManager;
 
 	public class PageLogin extends Page
@@ -85,6 +87,11 @@ package Pages
 		
 		protected function loginHandler(event:MouseEvent):void
 		{
+			Statics.DB.listTable('trans',function(data:Object):void {
+				for each (var o:Object in data as Array) {
+					Statics.PAGEOVERVIEW.dbFeed(new TypeTransaction(o));
+				}
+			});
 			Statics.NAV.next();
 		}		
 		
