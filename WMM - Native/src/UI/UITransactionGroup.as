@@ -22,7 +22,6 @@ package UI
 		private var _scroller:UIScrollVerticalMaker;
 		private var _parentScroller:UIScrollVerticalMaker;
 		private var _btnRealExpand:Rect;
-		private var _lst:Vector.<int> = new Vector.<int>;
 		public function UITransactionGroup(prID:String,parentScroller:UIScrollVerticalMaker)
 		{
 			super(prID);
@@ -64,12 +63,8 @@ package UI
 		}
 		
 		public function dbFeed(o:TypeTransaction):void {
-			_lst.push(o.tid);
-			var lcTranItem:UITransactionItem = new UITransactionItem(o.tid.toString(),o,this);
+			var lcTranItem:UITransactionItem = new UITransactionItem(o.tid.toString(),o,this,_scroller);
 			_scroller.attachVertical(lcTranItem);
-			if (_scroller.pureLayer.numChildren <= 3 ) {
-				_scroller.height += lcTranItem.height;
-			}
 			if (!stage) {
 				_sum += o.amount;
 				_txtSum.text = dFormat(Math.abs(_sum));
@@ -99,12 +94,8 @@ package UI
 			var lcThis:UITransactionGroup = this;
 			Statics.DB.addTrans(o.category,o.amount,o.FullDate,o.description,o.utcstamp,function(tid:int):void {
 				o.tid = tid;
-				_lst.push(tid);
-				var lcTranItem:UITransactionItem = new UITransactionItem(tid.toString(),o,lcThis);
+				var lcTranItem:UITransactionItem = new UITransactionItem(tid.toString(),o,lcThis,_scroller);
 				_scroller.attachVertical(lcTranItem);
-				if (_scroller.pureLayer.numChildren <= 3 ) {
-					_scroller.height += lcTranItem.height;
-				}
 				if (!stage) {
 					_sum += prAmount;
 					_txtSum.text = dFormat(Math.abs(_sum));
@@ -125,7 +116,6 @@ package UI
 		
 		protected function clickHandler(event:MouseEvent):void
 		{
-			if (_parentScroller.inTween) return;
 			var ty:Number = _mask.height;
 			if (_btnExpand.rotation == 0) {
 				addChild(_triangle);
@@ -134,18 +124,20 @@ package UI
 				addChildAt(_scroller,0);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 90});
 				Statics.tLite(_triangle, 0.25, {y: ty});
-				_parentScroller.expand(this,ty*(_scroller.pureLayer.numChildren<3?_scroller.pureLayer.numChildren:3));
-				//_parentScroller.scrollEnabled = false;
+				Statics.tLite(_scroller,0.25,{height: (_scroller.pureLayer.numChildren > 3)?3:(ty*_scroller.pureLayer.numChildren),onUpdate:function():void {
+					_parentScroller.attention();
+				}});
+				
 			}else{
-				if (_scroller && contains(_scroller)) {
+				Statics.tLite(_scroller,0.25,{height: 0,onUpdate:function():void {
+					_parentScroller.attention();
+				},onComplete:function():void {
 					removeChild(_scroller);
-				}
-				_parentScroller.collapse(this);
+				}});
 				Statics.tLite(_btnExpand, 0.25, {rotation: 0});
 				Statics.tLite(_triangle, 0.25, {y: ty+_triangle.height, onComplete:function():void {
 					removeChild(_triangle);
 					removeChild(_mask);
-					//_parentScroller.scrollEnabled = true;
 				}});
 			}
 		}
@@ -166,6 +158,11 @@ package UI
 				delete tmpO.a;
 				tmpO = null;
 			}});
+			_parentScroller.attention();
+		}
+		
+		public override function get height():Number {
+			return (_mask&&_scroller)?(_mask.height + _scroller.height):super.height;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package UI
 {
 	import com.Leo.utils.LeoBitmapResizer;
+	import com.Leo.utils.UIScrollVerticalMaker;
 	import com.Leo.utils.dFormat;
 	import com.Leo.utils.pf;
 	import com.ruochi.shape.Rect;
@@ -17,9 +18,11 @@ package UI
 		private var _data:TypeTransaction;
 		private var _btnEdit:Rect;
 		private var _parentGroup:UITransactionGroup;
-		public function UITransactionItem(prID:String,data:TypeTransaction,parentGroup)
+		private var _parentScroller:UIScrollVerticalMaker;
+		public function UITransactionItem(prID:String,data:TypeTransaction,parentGroup:UITransactionGroup,parentScroller:UIScrollVerticalMaker)
 		{
 			_parentGroup = parentGroup;
+			_parentScroller = parentScroller;
 			super(prID);
 			this.graphics.clear();
 			this.graphics.beginFill(0xf6f6f6);
@@ -74,6 +77,17 @@ package UI
 			Statics.DB.updateTrans(_data,{tid:_data.tid},function():void{
 				
 			});
+		}
+		
+		public function destruct():void {
+			_parentScroller.removeChild(this);
+			var dif:Number = _data.amount*-1;
+			_parentGroup.update(dif);
+			_btnEdit.removeEventListener(MouseEvent.CLICK, clickHandler);
+			_data = null;
+			_parentGroup = null;
+			_parentScroller = null;
+			_btnEdit = null;
 		}
 	}
 }

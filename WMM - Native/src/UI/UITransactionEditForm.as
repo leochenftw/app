@@ -4,6 +4,7 @@ package UI
 	import com.Leo.utils.LeoBitmapResizer;
 	import com.Leo.utils.LeoButton;
 	import com.Leo.utils.LeoInput;
+	import com.Leo.utils.alert;
 	import com.Leo.utils.dFormat;
 	import com.Leo.utils.pf;
 	import com.Leo.utils.trim;
@@ -17,7 +18,6 @@ package UI
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.text.TextField;
-	import flash.text.TextFormat;
 	
 	import DataTypes.TypeTransaction;
 	
@@ -69,6 +69,7 @@ package UI
 			_btnDelete.x = this.width - _x - _btnDelete.width;
 			_btnDelete.y = _y + _x;
 			addChild(_btnDelete);
+			_btnDelete.addEventListener(MouseEvent.CLICK, clickDelete);
 			
 			_btnEditMemo = new LeoImageButton(Math.round(Statics.STAGEHEIGHT*0.1),Math.round(Statics.STAGEHEIGHT*0.1), 0xCDCDCD, AssetManager.getImage('edit-memo'),0.5);
 			_btnEditMemo.x = this.width - _x - _btnEditMemo.width;
@@ -159,6 +160,23 @@ package UI
 			
 			_btnCancel.addEventListener(MouseEvent.CLICK, clickCancel);
 			_btnEnter.addEventListener(MouseEvent.CLICK, clickEnter);
+		}
+		
+		protected function clickDelete(e:MouseEvent):void
+		{
+			var Alert:alert = new alert('Delete Transaction','You are going to delete this transaction. Are you sure?','Yes','No');
+			stage.addChild(Alert);
+			Alert.ClickEvent(function(e:MouseEvent):void {
+				Alert.close();
+				Statics.DB.deleteTrans(_data.tid,afterDelete);
+			});
+		}
+		
+		protected function afterDelete(i:int):void {
+			if (Boolean(i)) {
+				_transaction.destruct();
+				clickCancel();
+			}
 		}
 		
 		protected function clickEnter(e:MouseEvent):void
