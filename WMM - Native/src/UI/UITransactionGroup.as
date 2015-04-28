@@ -67,7 +67,7 @@ package UI
 			_lst.push(o.tid);
 			var lcTranItem:UITransactionItem = new UITransactionItem(o.tid.toString(),o,this);
 			_scroller.attachVertical(lcTranItem);
-			if (_scroller.pureLayer.numChildren < 3 ) {
+			if (_scroller.pureLayer.numChildren <= 3 ) {
 				_scroller.height += lcTranItem.height;
 			}
 			if (!stage) {
@@ -101,9 +101,10 @@ package UI
 				o.tid = tid;
 				_lst.push(tid);
 				var lcTranItem:UITransactionItem = new UITransactionItem(tid.toString(),o,lcThis);
-				
 				_scroller.attachVertical(lcTranItem);
-				
+				if (_scroller.pureLayer.numChildren <= 3 ) {
+					_scroller.height += lcTranItem.height;
+				}
 				if (!stage) {
 					_sum += prAmount;
 					_txtSum.text = dFormat(Math.abs(_sum));
@@ -124,6 +125,7 @@ package UI
 		
 		protected function clickHandler(event:MouseEvent):void
 		{
+			if (_parentScroller.inTween) return;
 			var ty:Number = _mask.height;
 			if (_btnExpand.rotation == 0) {
 				addChild(_triangle);
@@ -138,7 +140,7 @@ package UI
 				if (_scroller && contains(_scroller)) {
 					removeChild(_scroller);
 				}
-				_parentScroller.collapse(this,_scroller.height);
+				_parentScroller.collapse(this);
 				Statics.tLite(_btnExpand, 0.25, {rotation: 0});
 				Statics.tLite(_triangle, 0.25, {y: ty+_triangle.height, onComplete:function():void {
 					removeChild(_triangle);
