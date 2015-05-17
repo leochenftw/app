@@ -24,6 +24,8 @@ package Managers
 		public static const imgCross:Class;
 		[Embed(source="../Assets/calendar.png")]
 		public static const imgCalendar:Class;
+		[Embed(source="../Assets/3lines.png")]
+		public static const imgMenu:Class;
 		
 		public function AssetManager()
 		{
@@ -63,6 +65,9 @@ package Managers
 					break;
 				case 'calendar':
 					bmp = new imgCalendar as Bitmap;
+					break;
+				case 'menu':
+					bmp = new imgMenu as Bitmap;
 					break;
 			}
 			bmp.smoothing = true;

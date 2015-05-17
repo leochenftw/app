@@ -69,7 +69,7 @@ package Pages
 			}
 			
 			_frm = new UITransactionForm(b,function(prCat:String, prAmount:Number):void {
-				var tmpID:String = DateFormatter(new Date());
+				var tmpID:String = DateFormatter(_frm.FormDate);
 				
 				if (_items[tmpID] === undefined) {
 					var item:UITransactionGroup = new UITransactionGroup(tmpID,_scroller);
