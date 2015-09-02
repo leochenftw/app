@@ -9,6 +9,7 @@ package
 	import Managers.AssetManager;
 	
 	import Pages.PageMetIn;
+	import Pages.PageMetOut;
 	
 	public class Preloader 
 	{
@@ -18,7 +19,7 @@ package
 			_callback = callback;
 			Statics.PADDINGTOP = Math.round(Statics.STAGEHEIGHT*0.1) + (os.isApple?40:0);
 			Statics.FONTSTYLES['page-title'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.05),0xffffff,null,null,null,null,null,'center');
-			Statics.FONTSTYLES['text-in'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.015),0x274162,null,null,null,null,null,'left');
+			Statics.FONTSTYLES['text-in'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.04),0x274162,null,null,null,null,null,'left');
 			/*Statics.FONTSTYLES['logoin-input'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.035*0.8),0xffffff,null,null,null,null,null,'left');
 			Statics.FONTSTYLES['date-label'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0x212121,null,null,null,null,null,'left');
 			Statics.FONTSTYLES['income'] = new TextFormat('Myriad Pro',Math.round(Statics.STAGEHEIGHT*0.11*0.25),0x10BEC6,null,null,null,null,null,'right');
@@ -36,21 +37,15 @@ package
 			Statics.LOGO.alpha = 0;
 			Statics.STAGE.addChild(Statics.LOGO);
 			
-			Statics.PAGEIN = new PageMetIn('IN: TAF/METAR');
+			Statics.PAGEIN = new PageMetIn('TAF/METAR');
 			Statics.PAGEIN.y = Statics.STAGEHEIGHT;
 			Statics.MAIN.addChild(Statics.PAGEIN);
 			
-//			Statics.PINPAD = new LeoPinpad(true);
-//			
-//			Statics.PAGELOGIN = new PageLogin;
-//			Statics.PAGEOVERVIEW = new PageOverview;
-//			
+			Statics.PAGEOUT = new PageMetOut('DECODED INFO');
 			Statics.PAGES.push(Statics.PAGEIN);
-//			Statics.PAGES.push(Statics.PAGEOVERVIEW);
-//			
+			Statics.PAGES.push(Statics.PAGEOUT);
+
 			Statics.NAV = new Navigator(Statics.STAGE,Statics.PAGES,'vertical',0.5);
-//			
-//			Statics.DB = new DBManager(_callback);
 			
 			Statics.tLite(Statics.LOGO, 0.5, {alpha: 1, onComplete:function():void {
 				Statics.tLite(Statics.BG, 0.5, {delay: 1, alpha: 1, onComplete:function():void {

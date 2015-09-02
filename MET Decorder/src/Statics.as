@@ -12,6 +12,7 @@ package
 	
 	import Pages.Page;
 	import Pages.PageMetIn;
+	import Pages.PageMetOut;
 	
 
 	public class Statics
@@ -22,7 +23,7 @@ package
 		public static var LOGO:Bitmap;
 		public static var BG:Bitmap;
 		public static var PAGEIN:PageMetIn;
-//		public static var PAGEOUT:PageMetOut;
+		public static var PAGEOUT:PageMetOut;
 		public static var PAGES:Vector.<Page> = new Vector.<Page>;
 		public static var STAGEHEIGHT:int;
 		public static var STAGEWIDTH:int;
