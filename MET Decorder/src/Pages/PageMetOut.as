@@ -6,6 +6,8 @@ package Pages
 	import com.ruochi.shape.RoundRect;
 	
 	import flash.events.MouseEvent;
+	
+	import Classes.ClsTranslate;
 
 	public class PageMetOut extends Page
 	{
@@ -13,6 +15,7 @@ package Pages
 		private var _scroller:UIScrollVerticalMaker;
 		private var _tray:RoundRect;
 		private var _output:UILabel;
+		private var _translator:ClsTranslate = new ClsTranslate;
 		public function PageMetOut(prTitle:String="")
 		{
 			super(prTitle);
@@ -45,10 +48,17 @@ package Pages
 		}
 		
 		public function set result(s:String):void {
-			//_scroller
-			_output.text = s;
-			_scroller.attention();
-			//_scroller.attachVertical(_
+			_translator.translate(s,updateText);
+			
 		}
+		
+		private function updateText(s:String):void {
+			while (s.indexOf('<br><br><br>') >= 0) {
+				s = s.replace(/<br><br><br>/gi,'<br><br>');
+			}
+			_output.htmlText = s;
+			_scroller.attention()
+		}
+		
 	}
 }

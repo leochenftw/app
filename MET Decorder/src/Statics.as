@@ -32,6 +32,8 @@ package
 		public static var FONTSTYLES:Dictionary = new Dictionary;
 		public static var ASSETS:Dictionary = new Dictionary;
 		
+		public static var HOURSAHEAD:Number = ((new Date).timezoneOffset / 60);
+		
 		public function Statics()
 		{
 			

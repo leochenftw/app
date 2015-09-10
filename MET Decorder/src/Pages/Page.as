@@ -18,5 +18,9 @@ package Pages
 			}
 		}
 		
+		public function set title(s:String):void {
+			_lblTitle.text = s;
+		}
+		
 	}
 }
